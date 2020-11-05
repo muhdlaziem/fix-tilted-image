@@ -53,4 +53,3 @@ if __name__ == '__main__':
         os.mkdir("outputs")
         cv2.imwrite(path, rotated)
         print(f'[INFO] Saved to {path}')
-
