@@ -41,7 +41,6 @@ if __name__ == '__main__':
     image = cv2.imread(args.p)
     angle, rotated = correct_skew(image)
 
-    
     print(f'[INFO] Angle : {angle}, size original : {image.shape}, size rotated : {rotated.shape}')
     imageName = args.p.split('/')[-1]
     path = f'outputs/{imageName}_rotated.png'
