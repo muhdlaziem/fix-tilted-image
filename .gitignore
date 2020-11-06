@@ -1,3 +1,8 @@
 env/
 table*
 **/.DS_Store
+**/medical*
+*.png
+*.jpg
+*.jpeg
+*.tif

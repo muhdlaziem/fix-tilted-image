@@ -33,22 +33,53 @@ def correct_skew(image, delta=1, limit=5):
 
     return best_angle, rotated
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-p", help="image path",type=str)
-    args = parser.parse_args()
-
-    image = cv2.imread(args.p)
-    angle, rotated = correct_skew(image)
-
+def saveImage(path, image, rotated, angle):
     print(f'[INFO] Angle : {angle}, size original : {image.shape}, size rotated : {rotated.shape}')
-    imageName = args.p.split('/')[-1]
+    imageName = path.split('/')[-1]
     path = f'outputs/{imageName}_rotated.png'
     if(os.path.exists("outputs")):
+
+        if(os.path.exists("test")):
+            cv2.imwrite(f'test/{imageName}.png', image)
+        else:
+            os.mkdir("test")
+            cv2.imwrite(f'test/{imageName}.png', image)
+
         cv2.imwrite(path, rotated)
         print(f'[INFO] Saved to {path}')
 
     else:
         os.mkdir("outputs")
+
+        if(os.path.exists("test")):
+            cv2.imwrite(f'test/{imageName}.png', image)
+        else:
+            os.mkdir("test")
+            cv2.imwrite(f'test/{imageName}.png', image)
+            
         cv2.imwrite(path, rotated)
         print(f'[INFO] Saved to {path}')
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", help="image path",type=str)
+    args = parser.parse_args()
+   
+    if(args.p.endswith(".tif")):
+        images =  cv2.imreadmulti(args.p)
+        images = images[1]
+        extracted_images = []
+        for i, image in enumerate(images):
+            img = np.asarray(image)
+            img = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
+            # print(img.shape)
+            angle, rotated = correct_skew(img)
+            # print(f'{args.p}_{i}')
+            saveImage(f'{args.p}_{i}',img, rotated, angle)
+
+    else:
+        image = cv2.imread(args.p)
+        angle, rotated = correct_skew(image)
+
+        saveImage(args.p, image, rotated, angle)
+        
